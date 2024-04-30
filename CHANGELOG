@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.0.0
+## v1.0.2
+### Changed
+ - Fix github auto release
+
+## v1.0.1
+### Changed
+ - Fix github auto release
+
+## v1.0.0
 ### Changed
  - Initial implementation
