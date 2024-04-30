@@ -33,10 +33,10 @@ jobs:
         CF_API_KEY: ${{ secrets.CF_API_KEY }}
 
     - name: Release github
-      uses: CupOfTea696/gh-action-auto-release@v1.0.0
+      uses: CupOfTea696/gh-action-auto-release@v1.0.2
       with:
         title: "Release: $version"
-        tag: "$semver"
+        tag: "v$semver"
         draft: false
         regex: "/^Release: #{semver}$/i"
       env:
