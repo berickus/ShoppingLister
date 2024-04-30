@@ -1,0 +1,43 @@
+name: Package and release
+
+on:
+  push:
+    tags:
+    - '**'
+
+    paths-ignore:
+    - ".github/**"
+
+jobs:
+  release:
+    strategy:
+      matrix:
+        type: [retail]
+        include:
+          - type: retail
+            pkgmeta: .pkgmeta
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone project
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Release curseforge
+      uses: BigWigsMods/packager@master
+      with:
+        args: -p 1007786 -g ${{matrix.type}} -m ${{matrix.pkgmeta}}
+      env:
+        CF_API_KEY: ${{ secrets.CF_API_KEY }}
+
+    - name: Release github
+      uses: CupOfTea696/gh-action-auto-release@v1.0.0
+      with:
+        title: "Release: $version"
+        tag: "$semver"
+        draft: false
+        regex: "/^Release: #{semver}$/i"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

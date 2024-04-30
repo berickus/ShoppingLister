@@ -1,0 +1,3 @@
+package-as: ShoppingLister
+ignore:
+  - README.md

@@ -1,0 +1,21 @@
+local L = LibStub("AceLocale-3.0"):NewLocale("ShoppingLister", "enUS", true)
+
+L["general"] = "General";
+L["debug"] = "Debug";
+L["debug_toggle"] = "Toggle debugging output";
+L["config"] = "Config";
+L["config_toggle"] = "Open the configuration GUI";
+L["show"] = "Show";
+L["show_toggle"] = "Show/Hide the Transform window";
+L["window_scale"] = "Window Scale";
+L["window_scale_desc"] = "Scale the Paste window and all its contents";
+L["default_chat_message"] = "Select your TSM group and generate a shopping list from it.";
+L["tsm_groups_label"] = "TSM groups";
+L["tsm_checkbox_label"] = "TSM Subgroups included?";
+L["sl_name_label"] = "Shopping list name";
+L["transform_button"] = "Transform";
+L["clear_button"] = "Clear";
+L["status_text"] = "Transformation done.";
+L["no_tsm_groups"] = "No TSM groups available";
+L["addon_disabled"] = "Addon disabled";
+L["welcome_message"] = "%s is loaded.";
