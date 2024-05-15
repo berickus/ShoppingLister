@@ -413,21 +413,11 @@ function private.addonButton()
 	addonButton:SetFrameStrata("HIGH")
 	addonButton:SetSize(120, 22) -- width, height
 	addonButton:SetText("Shopping Lister")
-	-- center is fine for now, but need to pin to auction house frame https://wowwiki-archive.fandom.com/wiki/API_Region_SetPoint
-	addonButton:SetPoint("TOPLEFT", "AuctionHouseFrame", "TOPLEFT", 80, 0)
+	addonButton:SetPoint("TOPRIGHT", "AuctionHouseFrame", "TOPRIGHT", -610, 0)
 
 	-- make moveable
-	addonButton:SetMovable(true)
+	addonButton:SetMovable(false)
 	addonButton:EnableMouse(true)
-	addonButton:RegisterForDrag("LeftButton")
-	addonButton:SetScript("OnDragStart", function(self, button)
-		self:StartMoving()
-		-- print("OnDragStart", button)
-	end)
-	addonButton:SetScript("OnDragStop", function(self)
-		self:StopMovingOrSizing()
-		-- print("OnDragStop")
-	end)
 
 	-- open main window on click
 	addonButton:SetScript("OnClick", function()
