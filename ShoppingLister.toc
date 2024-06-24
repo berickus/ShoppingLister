@@ -1,13 +1,16 @@
-## Interface: 100206
+## Interface: 100207, 110000
+## X-Min-Interface: 100207
 ## Title: ShoppingLister
 ## Description: Create shopping lists for Auctionator and PBS from your TSM groups
 ## Notes: Create shopping lists for Auctionator and PBS from your TSM groups
-## Author: Berickus
-## Version: @project-version@
 ## RequiredDependencies: TradeSkillMaster, Auctionator
 ## SavedVariables: ShoppingListerDB
+## Author: Berickus
+## Version: @project-version@
+## X-Curse-Project-ID: 1007786
+## X-Wago-ID: L6JDmYGv
 ## X-Localizations: enUS, deDE
-## X-Website: https://www.curseforge.com/wow/addons/shoppinglister
+## X-Website: https://goldcapped.com/ref/Berick/
 ## X-Category: Auction/Economy
 
 embeds.xml

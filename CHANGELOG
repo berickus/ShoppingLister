@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v1.0.4
+### Changed
+ - Added WAGO release and updated interface version
+
+## v1.0.3
+### Changed
+ - Fix button positioning issue when TSM window is shown
+
 ## v1.0.2
 ### Changed
  - Fix github auto release

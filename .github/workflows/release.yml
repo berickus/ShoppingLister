@@ -1,9 +1,12 @@
 name: Package and release
 
 on:
+  workflow_dispatch:
   push:
+    branches:
+    - main
     tags:
-    - '**'
+    - '*'
 
     paths-ignore:
     - ".github/**"
@@ -20,24 +23,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Clone project
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
-    - name: Release curseforge
-      uses: BigWigsMods/packager@master
+    - uses: BigWigsMods/packager@master
       with:
-        args: -p 1007786 -g ${{matrix.type}} -m ${{matrix.pkgmeta}}
+        args: -g ${{matrix.type}} -m ${{matrix.pkgmeta}}
       env:
         CF_API_KEY: ${{ secrets.CF_API_KEY }}
-
-    - name: Release github
-      uses: CupOfTea696/gh-action-auto-release@v1.0.2
-      with:
-        title: "Release: $version"
-        tag: "v$semver"
-        draft: false
-        regex: "/^Release: #{semver}$/i"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+        WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
