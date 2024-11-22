@@ -1,11 +1,11 @@
+local _, SL = ...
 local addonName = "ShoppingLister"
-local addon = LibStub("AceAddon-3.0"):NewAddon(select(2, ...), addonName, "AceConsole-3.0")
+local SL = LibStub("AceAddon-3.0"):NewAddon(SL, addonName, "AceConsole-3.0")
 local AceGUI = LibStub("AceGUI-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName);
 
 local defaults = {
 	profile = {
-		debug = false, -- for addon debugging
 		stripempty = true,
 		trimwhitespace = false,
 		windowscale = 1.0,
@@ -29,23 +29,13 @@ local private = {
 	},
 }
 
-local function chatMsg(msg)
-	DEFAULT_CHAT_FRAME:AddMessage(addonName .. ": " .. msg)
-end
-
-local function debug(msg)
-	if addon.db.profile.debug then
-		chatMsg(msg)
-	end
-end
-
-function addon:GetOptions()
+function SL:GetOptions()
 	return {
 		type = "group",
 		set = function(info, val)
 			local s = settings; for i = 2, #info - 1 do s = s[info[i]] end
-			s[info[#info]] = val; -- debug(info[#info] .. " set to: " .. tostring(val))
-			addon:Update()
+			s[info[#info]] = val; SL.Debug.Log(info[#info] .. " set to: " .. tostring(val))
+			SL:Update()
 		end,
 		get = function(info)
 			local s = settings; for i = 2, #info - 1 do s = s[info[i]] end
@@ -57,25 +47,19 @@ function addon:GetOptions()
 				inline = true,
 				name = L["general"],
 				args = {
-					debug = {
-						name = L["debug"],
-						desc = L["debug_toggle"],
-						type = "toggle",
-						guiHidden = true,
-					},
 					config = {
 						name = L["config"],
 						desc = L["config_toggle"],
 						type = "execute",
 						guiHidden = true,
-						func = function() addon:Config() end,
+						func = function() SL:Config() end,
 					},
 					show = {
 						name = L["show"],
 						desc = L["show_toggle"],
 						type = "execute",
 						guiHidden = true,
-						func = function() addon:ToggleWindow() end,
+						func = function() SL:ToggleWindow() end,
 					},
 					aheader = {
 						name = APPEARANCE_LABEL,
@@ -100,10 +84,10 @@ function addon:GetOptions()
 	}
 end
 
-function addon:RefreshConfig()
+function SL:RefreshConfig()
 	-- things to do after load or settings are reset
-	-- debug("RefreshConfig")
-	settings = addon.db.profile
+	SL.Debug.Log("RefreshConfig")
+	settings = SL.db.profile
 	private.settings = settings
 
 	for k, v in pairs(defaults.profile) do
@@ -114,14 +98,14 @@ function addon:RefreshConfig()
 
 	settings.loaded = true
 
-	addon:Update()
+	SL:Update()
 end
 
-function addon:Update()
+function SL:Update()
 	-- things to do when settings changed
 
-	if addon.gui then -- scale the window
-		local frame = addon.gui.frame
+	if SL.gui then -- scale the window
+		local frame = SL.gui.frame
 		local old = frame:GetScale()
 		local new = settings.windowscale
 
@@ -136,11 +120,11 @@ function addon:Update()
 	end
 end
 
-function addon:OnInitialize()
-	addon.db = LibStub("AceDB-3.0"):New("ShoppingListerDB", defaults, true)
-	addon:RefreshConfig()
+function SL:OnInitialize()
+	SL.db = LibStub("AceDB-3.0"):New("ShoppingListerDB", defaults, true)
+	SL:RefreshConfig()
 
-	local options = addon:GetOptions()
+	local options = SL:GetOptions()
 	LibStub("AceConfigRegistry-3.0"):ValidateOptionsTable(options, addonName)
 	LibStub("AceConfig-3.0"):RegisterOptionsTable(addonName, options, { "shoppinglister" })
 
@@ -150,31 +134,31 @@ function addon:OnInitialize()
 			settings[k] = table_clone(v)
 		end
 
-		addon:RefreshConfig()
+		SL:RefreshConfig()
 
 		if SettingsPanel:IsShown() then
-			addon:Config(); addon:Config()
+			SL:Config(); SL:Config()
 		end
 	end
 
-	options.args.profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(addon.db)
+	options.args.profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(SL.db)
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions(addonName, "Profiles", addonName, "profiles")
 
-	-- debug("OnInitialize")
+	SL.Debug.Log("OnInitialize")
 
 	self.db.RegisterCallback(self, "OnProfileChanged", "RefreshConfig")
 	self.db.RegisterCallback(self, "OnProfileCopied", "RefreshConfig")
 	self.db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")
 	self.db.RegisterCallback(self, "OnDatabaseReset", "RefreshConfig")
-	addon:RegisterChatCommand('sl', 'HandleChatCommand')
-	addon:RegisterChatCommand('slist', 'HandleChatCommand')
-	addon:RegisterChatCommand('shoppinglister', 'HandleChatCommand')
+	SL:RegisterChatCommand('sl', 'HandleChatCommand')
+	SL:RegisterChatCommand('slist', 'HandleChatCommand')
+	SL:RegisterChatCommand('shoppinglister', 'HandleChatCommand')
 
 	private.PrepareTsmGroups()
-	addon:RefreshConfig()
+	SL:RefreshConfig()
 end
 
-function addon:HandleChatCommand(input)
+function SL:HandleChatCommand(input)
 	local args = { strsplit(' ', input) }
 
 	for _, arg in ipairs(args) do
@@ -186,10 +170,10 @@ function addon:HandleChatCommand(input)
 		end
 	end
 
-	addon:ToggleWindow()
+	SL:ToggleWindow()
 end
 
-function addon:Config()
+function SL:Config()
 	if optionsFrame then
 		if (SettingsPanel:IsShown()) then
 			SettingsPanel:Hide();
@@ -199,30 +183,30 @@ function addon:Config()
 	end
 end
 
-function addon:OnEnable()
-	-- debug("OnEnable")
-	addon:Print(format(L["welcome_message"], addonName))
-	addon:Update()
+function SL:OnEnable()
+	SL.Debug.Log("OnEnable")
+	SL:Print(format(L["welcome_message"], addonName))
+	SL:Update()
 end
 
-function addon:ToggleWindow(keystate)
+function SL:ToggleWindow(keystate)
 	if keystate == "down" then return end -- ensure keybind doesnt end up in the text box
-	-- debug("ToggleWindow")
+	SL.Debug.Log("ToggleWindow")
 
-	if not addon.gui then
-		addon:CreateWindow()
+	if not SL.gui then
+		SL:CreateWindow()
 	end
 
-	if addon.gui:IsShown() then
-		addon.gui:Hide()
+	if SL.gui:IsShown() then
+		SL.gui:Hide()
 	else
-		addon.gui:Show()
-		addon:Update()
+		SL.gui:Show()
+		SL:Update()
 	end
 end
 
-function addon:CreateWindow()
-	if addon.gui then
+function SL:CreateWindow()
+	if SL.gui then
 		return
 	end
 
@@ -233,19 +217,19 @@ function addon:CreateWindow()
 	frame.content:SetFrameStrata("MEDIUM")
 	frame.content:Raise()
 	frame:Hide()
-	addon.gui = frame
+	SL.gui = frame
 	frame:SetTitle(addonName)
 	frame:SetCallback("OnClose", OnClose)
 	frame:SetLayout("Fill")
 	frame.frame:SetClampedToScreen(true)
 	settings.pos = settings.pos or {}
 	frame:SetStatusTable(settings.pos)
-	addon.minwidth = 800
-	addon.minheight = 200
-	frame:SetWidth(addon.minwidth)
-	frame:SetHeight(addon.minheight)
+	SL.minwidth = 800
+	SL.minheight = 200
+	frame:SetWidth(SL.minwidth)
+	frame:SetHeight(SL.minheight)
 	frame:SetAutoAdjustHeight(true)
-	private.SetEscapeHandler(frame, function() addon:ToggleWindow() end)
+	private.SetEscapeHandler(frame, function() SL:ToggleWindow() end)
 
 	-- Create main group, where everything is placed.
 	local mainGroup = private.CreateGroup("List", frame)
@@ -260,7 +244,7 @@ function addon:CreateWindow()
 	-- Create tsm dropdown
 	local tsmDropdown = AceGUI:Create("Dropdown")
 	tsmGroup:AddChild(tsmDropdown)
-	addon.tsmDropdown = tsmDropdown
+	SL.tsmDropdown = tsmDropdown
 	tsmDropdown:SetMultiselect(false)
 	tsmDropdown:SetLabel(L["tsm_groups_label"])
 	tsmDropdown:SetRelativeWidth(0.5)
@@ -273,7 +257,7 @@ function addon:CreateWindow()
 
 	-- Create tsm sub group checkbox
 	local tsmSubgroups = AceGUI:Create("CheckBox")
-	addon.tsmSubgroups = tsmSubgroups
+	SL.tsmSubgroups = tsmSubgroups
 	tsmGroup:AddChild(tsmSubgroups)
 	tsmSubgroups:SetType("checkbox")
 	tsmSubgroups:SetLabel(L["tsm_checkbox_label"])
@@ -284,7 +268,7 @@ function addon:CreateWindow()
 	slGroup:SetFullWidth(false)
 	slGroup:SetRelativeWidth(0.5)
 	local slName = AceGUI:Create("EditBox")
-	addon.slName = slName
+	SL.slName = slName
 	slGroup:AddChild(slName)
 	slName:SetLabel(L["sl_name_label"])
 	slName:SetRelativeWidth(0.5)
@@ -292,16 +276,16 @@ function addon:CreateWindow()
 
 	-- AceGUI fails at enforcing minimum Frame resize for a container, so fix it
 	hooksecurefunc(frame, "OnHeightSet", function(widget, height)
-		if (widget ~= addon.gui) then return end
-		if (height < addon.minheight) then
-			frame:SetHeight(addon.minheight)
+		if (widget ~= SL.gui) then return end
+		if (height < SL.minheight) then
+			frame:SetHeight(SL.minheight)
 		end
 	end)
 
 	hooksecurefunc(frame, "OnWidthSet", function(widget, width)
-		if (widget ~= addon.gui) then return end
-		if (width < addon.minwidth) then
-			frame:SetWidth(addon.minwidth)
+		if (widget ~= SL.gui) then return end
+		if (width < SL.minwidth) then
+			frame:SetWidth(SL.minwidth)
 		end
 	end)
 
@@ -321,11 +305,11 @@ function addon:CreateWindow()
 	clearButton:SetText(L["clear_button"])
 	clearButton:SetWidth(buttonWidth)
 	clearButton:SetCallback("OnClick", function(widget, button)
-		if (addon.TSM.IsLoaded()) then
-			addon.tsmDropdown:SetValue("")
+		if (SL.TSM.IsLoaded()) then
+			SL.tsmDropdown:SetValue("")
 		end
-		addon.gui:SetStatusText("")
-		addon.slName:SetText("")
+		SL.gui:SetStatusText("")
+		SL.slName:SetText("")
 	end)
 	buttonsGroup:AddChild(clearButton)
 end
@@ -344,26 +328,26 @@ function private.CreateGroup(layout, parent)
 end
 
 function private.ClearDropdown()
-	addon.tsmDropdown:SetValue("")
+	SL.tsmDropdown:SetValue("")
 	settings.settings.tsmDropdown = ""
 end
 
 function private.UpdateValues()
-	-- debug("UpdateValues")
-	local widgetTsmDropdown = addon.tsmDropdown
+	SL.Debug.Log("UpdateValues")
+	local widgetTsmDropdown = SL.tsmDropdown
 	if widgetTsmDropdown and not widgetTsmDropdown.open then
-		-- debug("Setting tsm groups dropdown")
+		SL.Debug.Log("Setting tsm groups dropdown")
 		widgetTsmDropdown:SetList(private.availableTsmGroups)
 	end
 end
 
 function private.PrepareTsmGroups()
-	-- debug("PrepareTsmGroups()")
+	SL.Debug.Log("PrepareTsmGroups()")
 
 	-- price source check --
-	local tsmGroups = addon.TSM.GetGroups() or {}
-	-- debug(format("loaded %d tsm groups", private.tablelength(tsmGroups)));
-	-- debug("Groups: " .. private.tableToString(tsmGroups))
+	local tsmGroups = SL.TSM.GetGroups() or {}
+	SL.Debug.Log(format("loaded %d tsm groups", private.tablelength(tsmGroups)));
+	SL.Debug.Log("Groups: " .. private.tableToString(tsmGroups))
 
 	-- only 2 or less price sources -> chat msg: missing modules
 	if private.tablelength(tsmGroups) < 1 then
@@ -376,19 +360,19 @@ function private.PrepareTsmGroups()
 		}
 		StaticPopup_Show("AT_NO_TSMGROUPS");
 
-		addon:Print(L["addon_disabled"]);
-		addon:Disable();
+		SL:Print(L["addon_disabled"]);
+		SL:Disable();
 		return
 	end
 
 	private.tsmGroups = tsmGroups
 
 	for k, v in pairs(tsmGroups) do
-		local parent, group = addon.TSM.SplitGroupPath(v)
+		local parent, group = SL.TSM.SplitGroupPath(v)
 		local _, c = v:gsub("`", "")
 
 		if (parent ~= nil) then
-			group = private.lpad(addon.TSM.FormatGroupPath(group), c * 4, " ")
+			group = private.lpad(SL.TSM.FormatGroupPath(group), c * 4, " ")
 		end
 		table.insert(private.availableTsmGroups, k, group)
 	end
@@ -396,11 +380,11 @@ end
 
 function private.Transform()
 	local selectedGroup = private.tsmGroups[private.GetFromDb("settings", "tsmDropdown")]
-	local subgroups = addon.tsmSubgroups:GetValue()
+	local subgroups = SL.tsmSubgroups:GetValue()
 
-	-- debug("Transforming: " .. selectedGroup .. " including subgroups: " .. tostring(subgroups))
+	SL.Debug.Log("Transforming: " .. selectedGroup .. " including subgroups: " .. tostring(subgroups))
 	if private.ProcessTSMGroup(selectedGroup, subgroups) then
-		addon.gui:SetStatusText(L["status_text"])
+		SL.gui:SetStatusText(L["status_text"])
 		return true
 	end
 
@@ -421,7 +405,7 @@ function private.addonButton()
 
 	-- open main window on click
 	addonButton:SetScript("OnClick", function()
-		addon:ToggleWindow()
+		SL:ToggleWindow()
 		-- addonButton:Hide()
 	end)
 
@@ -459,9 +443,9 @@ end
 
 function private.GetFromDb(grp, key, ...)
 	if not key then
-		return addon.db.profile[grp]
+		return SL.db.profile[grp]
 	end
-	return addon.db.profile[grp][key]
+	return SL.db.profile[grp][key]
 end
 
 function private.lpad(str, len, char)
@@ -505,22 +489,22 @@ end
 
 function private.ProcessTSMGroup(group, includeSubgroups)
 	local items = {}
-	addon.TSM.GetGroupItems(group, includeSubgroups, items)
+	SL.TSM.GetGroupItems(group, includeSubgroups, items)
 	return private.ProcessItems(items)
 end
 
 function private.ProcessItems(items)
-	-- debug("Items: " .. private.tableToString(items))
+	SL.Debug.Log("Items: " .. private.tableToString(items))
 
 	local searchStrings = {}
 	local count = 1
 	for _, itemString in pairs(items) do
-		local itemName = type(itemString) == "string" and addon.TSM.GetItemName(itemString)
-		-- debug("itemString: " .. itemString)
-		-- debug("itemName: " .. itemName)
+		local itemName = type(itemString) == "string" and SL.TSM.GetItemName(itemString)
+		SL.Debug.Log("itemString: " .. itemString)
+		SL.Debug.Log("itemName: " .. itemName)
 		if (itemName == nil or string.match(itemString, "::")) then
-			-- debug("skipped itemString: " .. itemString)
-			-- debug("skipped itemName: " .. itemName)
+			SL.Debug.Log("skipped itemString: " .. itemString)
+			SL.Debug.Log("skipped itemName: " .. itemName)
 		else
 			local searchTerm = {
 				searchString = itemName,
@@ -531,6 +515,6 @@ function private.ProcessItems(items)
 			count = count + 1
 		end
 	end
-	Auctionator.API.v1.CreateShoppingList(addonName, addon.slName:GetText(), searchStrings)
+	Auctionator.API.v1.CreateShoppingList(addonName, SL.slName:GetText(), searchStrings)
 	return true
 end
