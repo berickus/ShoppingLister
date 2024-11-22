@@ -1,5 +1,5 @@
-## Interface: 100207, 110000
-## X-Min-Interface: 100207
+## Interface: 110005
+## X-Min-Interface: 110005
 ## Title: ShoppingLister
 ## Description: Create shopping lists for Auctionator and PBS from your TSM groups
 ## Notes: Create shopping lists for Auctionator and PBS from your TSM groups
@@ -16,6 +16,8 @@
 embeds.xml
 
 Locales\Locales.xml
+
+Core\Debug.lua
 
 ShoppingLister.lua
 
