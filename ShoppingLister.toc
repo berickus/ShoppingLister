@@ -1,5 +1,5 @@
-## Interface: 110005
-## X-Min-Interface: 110005
+## Interface: 110007
+## X-Min-Interface: 110007
 ## Title: ShoppingLister
 ## Description: Create shopping lists for Auctionator and PBS from your TSM groups
 ## Notes: Create shopping lists for Auctionator and PBS from your TSM groups
