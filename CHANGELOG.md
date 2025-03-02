@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v1.0.7
+### Changed
+ - Bump interface version
+
 ## v1.0.6
 ### Changed
  - Bump interface version
