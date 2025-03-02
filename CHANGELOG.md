@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v1.0.8
+### Changed
+ - Improved TSM group loading and handling
+
 ## v1.0.7
 ### Changed
  - Bump interface version

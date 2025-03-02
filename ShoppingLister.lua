@@ -106,6 +106,8 @@ function SL:Update()
     -- things to do when settings changed
 
     if SL.gui then -- scale the window
+        private.PrepareTsmGroups()
+        private.UpdateValues()
         local frame = SL.gui.frame
         local old = frame:GetScale()
         local new = settings.windowscale
@@ -249,12 +251,9 @@ function SL:CreateWindow()
     tsmDropdown:SetMultiselect(false)
     tsmDropdown:SetLabel(L["tsm_groups_label"])
     tsmDropdown:SetRelativeWidth(0.5)
-    tsmDropdown:SetCallback("OnEnter", private.UpdateValues)
     tsmDropdown:SetCallback("OnValueChanged", function(widget, event, key)
         settings.settings.tsmDropdown = key
-        private.UpdateValues()
     end)
-    private.UpdateValues()
 
     -- Create tsm sub group checkbox
     local tsmSubgroups = AceGUI:Create("CheckBox")
@@ -342,7 +341,6 @@ function private.PrepareTsmGroups()
     -- price source check --
     local tsmGroups = SL.TSM.GetGroups() or {}
     SL.Debug.Log(format("loaded %d tsm groups", private.tablelength(tsmGroups)));
-    SL.Debug.Log("Groups: " .. private.tableToString(tsmGroups))
 
     -- only 2 or less price sources -> chat msg: missing modules
     if private.tablelength(tsmGroups) < 1 then
@@ -361,6 +359,7 @@ function private.PrepareTsmGroups()
     end
 
     private.tsmGroups = tsmGroups
+    private.availableTsmGroups = {}
 
     for k, v in pairs(tsmGroups) do
         local parent, group = SL.TSM.SplitGroupPath(v)
