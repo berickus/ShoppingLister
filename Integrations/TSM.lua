@@ -62,3 +62,11 @@ function TSM.GetItemName(itemString)
 
   return TSM_API.GetItemName(itemString)
 end
+
+function TSM.GetItemLink(itemString)
+  if not TSM.IsLoaded() then
+    return itemString
+  end
+
+  return TSM_API.GetItemLink(itemString)
+end

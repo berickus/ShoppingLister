@@ -490,19 +490,35 @@ function private.ProcessItems(items)
         local itemName = type(itemString) == "string" and
                              SL.TSM.GetItemName(itemString)
         SL.Debug.Log("itemString: " .. itemString)
-        SL.Debug.Log("itemName: " .. itemName)
-        if (itemName == nil or string.match(itemString, "::")) then
+        if (itemName == nil) then
             SL.Debug.Log("skipped itemString: " .. itemString)
-            SL.Debug.Log("skipped itemName: " .. itemName)
+        elseif (string.match(itemString, "::")) then
+            local itemLink = type(itemString) == "string" and
+                                 SL.TSM.GetItemLink(itemString)
+            
+                                 SL.Debug.Log("itemLink: " .. itemLink)                     
+            local _, _, _, iLevel, _, _, _, _ = C_Item.GetItemInfo(itemLink);
+            local searchTerm = {searchString = itemName, minItemLevel = iLevel, maxItemLevel = iLevel, isExact = true}
+            local searchString = Auctionator.API.v1.ConvertToSearchString(
+                                     addonName, searchTerm)
+            SL.Debug.Log("searchString: " .. searchString)
+            searchStrings[count] = searchString
+            count = count + 1
         else
             local searchTerm = {searchString = itemName, isExact = true}
             local searchString = Auctionator.API.v1.ConvertToSearchString(
                                      addonName, searchTerm)
+            SL.Debug.Log("searchString: " .. searchString)
             searchStrings[count] = searchString
             count = count + 1
         end
     end
-    Auctionator.API.v1.CreateShoppingList(addonName, SL.slName:GetText(),
+    local slName = SL.slName:GetText()
+    if (slName == nil or slName == "") then
+        slName = private.availableTsmGroups[private.GetFromDb("settings",
+        "tsmDropdown")]
+    end
+    Auctionator.API.v1.CreateShoppingList(addonName, slName,
                                           searchStrings)
     return true
 end
