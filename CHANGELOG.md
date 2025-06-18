@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v1.0.11
+### Changed
+ - Bump interface version
+
 ## v1.0.10
 ### Changed
  - Fixed issue with specific items in TSM groups
