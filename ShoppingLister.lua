@@ -42,7 +42,7 @@ local function tooltip_draw(isAddonCompartment, blizzardTooltip)
   tooltip:Show();
 end
 
-addon.GenerateTooltip = tooltip_draw;
+SL.GenerateTooltip = tooltip_draw;
 
 function SL:GetOptions()
     return {
@@ -195,7 +195,7 @@ function SL:OnInitialize()
       end,
       funcOnEnter = function(button)
           MenuUtil.ShowTooltip(button, function(tooltip)
-              addon.GenerateTooltip(true, tooltip)
+              SL.GenerateTooltip(true, tooltip)
           end)
       end,
       funcOnLeave = function(button) MenuUtil.HideTooltip(button) end

@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v1.1.2
+### Changed
+ - Fixed a typo
+
 ## v1.1.1
 ### Changed
  - Addon compartment improved
