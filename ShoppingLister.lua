@@ -165,6 +165,18 @@ function SL:OnInitialize()
 
     private.PrepareTsmGroups()
     SL:RefreshConfig()
+
+    AddonCompartmentFrame:RegisterAddon({
+      text = addonName,
+      registerForAnyClick = true,
+      notCheckable = true,
+      func = function(button, menuInputData, menu)
+        local mouseButton = menuInputData.buttonName
+        if mouseButton == "LeftButton" then
+          SL:ToggleWindow()
+        end
+      end,
+    })
 end
 
 function SL:HandleChatCommand(input)

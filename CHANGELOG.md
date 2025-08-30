@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v1.1.0
+### Changed
+ - Addon compartment added
+
 ## v1.0.12
 ### Changed
  - Bump ToC version
