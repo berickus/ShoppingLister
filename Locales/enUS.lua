@@ -19,3 +19,7 @@ L["status_text"] = "Transformation done.";
 L["no_tsm_groups"] = "No TSM groups available";
 L["addon_disabled"] = "Addon disabled";
 L["welcome_message"] = "%s is loaded.";
+L["left_click"] = "Left click";
+L["right_click"] = "Right click";
+L["toogle"] = "to toggle window";
+L["options"] = "for options";

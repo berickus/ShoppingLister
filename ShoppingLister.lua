@@ -27,6 +27,23 @@ local private = {
     settings = {groups = {}}
 }
 
+local function tooltip_draw(isAddonCompartment, blizzardTooltip)
+  local tooltip
+  if isAddonCompartment then
+    tooltip = blizzardTooltip
+  else
+    tooltip = GameTooltip
+  end
+  tooltip:ClearLines()
+  tooltip:AddDoubleLine(addonName, versionString)
+  tooltip:AddLine(" ")
+  tooltip:AddLine("|cffff8040" .. L["left_click"] .. "|r " .. L["toogle"])
+  tooltip:AddLine("|cffff8040" .. L["right_click"] .. "|r " .. L["options"])
+  tooltip:Show();
+end
+
+addon.GenerateTooltip = tooltip_draw;
+
 function SL:GetOptions()
     return {
         type = "group",
@@ -176,6 +193,12 @@ function SL:OnInitialize()
           SL:ToggleWindow()
         end
       end,
+      funcOnEnter = function(button)
+          MenuUtil.ShowTooltip(button, function(tooltip)
+              addon.GenerateTooltip(true, tooltip)
+          end)
+      end,
+      funcOnLeave = function(button) MenuUtil.HideTooltip(button) end
     })
 end
 
@@ -197,7 +220,8 @@ function SL:Config()
         if (SettingsPanel:IsShown()) then
             SettingsPanel:Hide();
         else
-            InterfaceOptionsFrame_OpenToCategory(optionsFrame)
+			Settings.OpenToCategory(addonName)
+			SettingsPanel.AddOnsTab:Click()
         end
     end
 end

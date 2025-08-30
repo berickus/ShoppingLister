@@ -19,3 +19,7 @@ L["status_text"] = "Umwandlung abgeschlossen.";
 L["no_tsm_groups"] = "Keine TSM Gruppen vorhanden";
 L["addon_disabled"] = "Addon ausgeschaltet";
 L["welcome_message"] = "%s ist geladen.";
+L["left_click"] = "Linksklick";
+L["right_click"] = "Rechtsklick";
+L["toogle"] = "um das Fenster zu zeigen";
+L["options"] = "für die Eigenschaften";
