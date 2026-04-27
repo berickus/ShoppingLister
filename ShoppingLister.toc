@@ -1,4 +1,4 @@
-## Interface: 120000, 120001
+## Interface: 120005
 ## Title: ShoppingLister
 ## Description: Create shopping lists for Auctionator and PBS from your TSM groups
 ## Notes: Create shopping lists for Auctionator and PBS from your TSM groups
